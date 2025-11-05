@@ -6,11 +6,13 @@ char *buffer = NULL;
 size_t bufsize = 0;
 ssize_t chars_read;
 pid_t child_pid;
-char **argv, *start, *end;
+char **argv;
+
 while (1)
 {
 if (isatty(STDIN_FILENO))
 printf("#cisfun$ ");
+
 chars_read = getline(&buffer, &bufsize, stdin);
 if (chars_read == -1)
 {
@@ -18,24 +20,19 @@ if (isatty(STDIN_FILENO))
 printf("\n");
 break;
 }
+
 if (buffer[chars_read - 1] == '\n')
 buffer[chars_read - 1] = '\0';
-/* Trim spaces */
-start = buffer;
-while (*start == ' ' || *start == '\t')
-start++;
-end = start + strlen(start) - 1;
-while (end > start && (*end == ' ' || *end == '\t'))
-*end-- = '\0';
-if (*start == '\0')
-continue;
-argv = parse_input(start);
+
+argv = parse_input(buffer);
+
 child_pid = fork();
 if (child_pid == -1)
 {
 perror("fork");
 break;
 }
+
 if (child_pid == 0)
 {
 execve(argv[0], argv, environ);
@@ -46,8 +43,10 @@ else
 {
 wait(NULL);
 }
+
 free(argv);
 }
+
 free(buffer);
 return (0);
 }
