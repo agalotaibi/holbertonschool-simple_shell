@@ -7,8 +7,6 @@ size_t bufsize = 0;
 ssize_t chars_read;
 pid_t child_pid;
 char **argv;
-int start = 0;
-int end;
 
 while (1)
 {
