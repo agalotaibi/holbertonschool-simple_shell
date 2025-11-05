@@ -13,5 +13,6 @@
 extern char **environ;
 int execute_command(char *command);
 ssize_t read_command(char *buffer, size_t size);
+char *trim_whitespace(char *str);
 
 #endif /* SHELL_H */
