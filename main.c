@@ -1,26 +1,5 @@
 #include "shell.h"
-
-/**
-* read_command - Reads a command from stdin
-* @buffer: Buffer to store the command
-* @size: Size of the buffer
-*
-* Return: Number of characters read, or -1 on EOF
-*/
-ssize_t read_command(char *buffer, size_t size)
-{
-ssize_t nread;
-
-nread = getline(&buffer, &size, stdin);
-
-if (nread == -1)
-return (-1);
-
-if (nread > 0 && buffer[nread - 1] == '\n')
-buffer[nread - 1] = '\0';
-
-return (nread);
-}
+#define MAX_ARGS 64
 
 /**
 * trim_whitespace - Removes leading and trailing whitespace
@@ -48,21 +27,46 @@ return (str);
 }
 
 /**
+* parse_command - Parses command line into arguments
+* @line: Command line to parse
+* @argv: Array to store argument pointers
+*
+* Return: Number of arguments parsed
+*/
+int parse_command(char *line, char **argv)
+{
+int argc = 0;
+char *token;
+
+token = strtok(line, " \t\n\r");
+while (token != NULL && argc < MAX_ARGS - 1)
+{
+argv[argc++] = token;
+token = strtok(NULL, " \t\n\r");
+}
+argv[argc] = NULL;
+
+return (argc);
+}
+
+/**
 * execute_command - Executes a command
-* @command: The command to execute
+* @line: The command line to execute
 *
 * Return: 0 on success, -1 on error
 */
-int execute_command(char *command)
+int execute_command(char *line)
 {
 pid_t pid;
 int status;
-char *argv[2];
-char *trimmed;
+char *argv[MAX_ARGS];
+int argc;
 
-trimmed = trim_whitespace(command);
+if (line == NULL || line[0] == '\0')
+return (0);
 
-if (trimmed == NULL || trimmed[0] == '\0')
+argc = parse_command(line, argv);
+if (argc == 0)
 return (0);
 
 pid = fork();
@@ -74,10 +78,7 @@ return (-1);
 }
 else if (pid == 0)
 {
-argv[0] = trimmed;
-argv[1] = NULL;
-
-if (execve(trimmed, argv, environ) == -1)
+if (execve(argv[0], argv, environ) == -1)
 {
 fprintf(stderr, "./shell: No such file or directory\n");
 exit(127);
@@ -99,16 +100,9 @@ return (0);
 int main(void)
 {
 char *buffer = NULL;
-size_t bufsize = MAX_CMD_LEN;
+size_t bufsize = 0;
 ssize_t nread;
 int interactive;
-
-buffer = malloc(bufsize);
-if (buffer == NULL)
-{
-perror("malloc");
-return (1);
-}
 
 interactive = isatty(STDIN_FILENO);
 
@@ -132,9 +126,20 @@ break;
 if (nread > 0 && buffer[nread - 1] == '\n')
 buffer[nread - 1] = '\0';
 
-execute_command(buffer);
+{
+char *trimmed = trim_whitespace(buffer);
+if (trimmed[0] != '\0')
+{
+char *cmd_copy = strdup(trimmed);
+if (cmd_copy != NULL)
+{
+execute_command(cmd_copy);
+free(cmd_copy);
+}
+}
+}
 }
 
 free(buffer);
 return (0);
-}
+}11;rgb:2b2b/2b2b/2b2b
