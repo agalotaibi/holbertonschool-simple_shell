@@ -142,4 +142,5 @@ free(cmd_copy);
 
 free(buffer);
 return (0);
-}11;rgb:2b2b/2b2b/2b2b
+}
+
