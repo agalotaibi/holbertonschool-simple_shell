@@ -11,7 +11,7 @@
 extern char **environ;
 char **parse_input(char *start);
 void execute_command(char *buffer);
-void trim_spaces(char *str);
+char *trim_spaces(char *str);
 int _strlen(char *s);
 char *_strcpy(char *dest, char *src);
 
