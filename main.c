@@ -6,6 +6,7 @@
 */
 int main(void)
 {
+  char *input_ptr = NULL; 
 char *buffer = NULL;
 size_t bufsize = 0;
 ssize_t chars_read;
@@ -17,7 +18,7 @@ while (1)
 if (isatty(STDIN_FILENO))
 printf("#cisfun$ ");
 
-chars_read = getline(&buffer, &bufsize, stdin);
+chars_read = getline(&input_ptr, &bufsize, stdin);
 if (chars_read == -1)
 {
 if (isatty(STDIN_FILENO))
@@ -25,8 +26,8 @@ printf("\n");
 break;
 }
 
-buffer[chars_read - 1] = '\0';
-buffer = trim_spaces(buffer);
+input_ptr[chars_read - 1] = '\0';
+input_ptr = trim_spaces(input_ptr);
 
 if (buffer[0] == '\0')
 continue;
@@ -55,7 +56,7 @@ wait(NULL);
 }
 }
 
-free(buffer);
+free(input_ptr);
 return (0);
 }
 
