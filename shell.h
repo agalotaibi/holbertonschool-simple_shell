@@ -3,16 +3,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+#define MAX_CMD_LEN 1024
 
 extern char **environ;
-char **parse_input(char *start);
-void execute_command(char *buffer);
-char *trim_spaces(char *str);
-int _strlen(char *s);
-char *_strcpy(char *dest, char *src);
+int execute_command(char *command);
+ssize_t read_command(char *buffer, size_t size);
 
-#endif 
+#endif /* SHELL_H */

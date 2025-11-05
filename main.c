@@ -1,86 +1,113 @@
 #include "shell.h"
 
 /**
- * main - Entry point for the simple shell program.
- * Return: Always 0 on success.
+ * read_command - Reads a command from stdin
+ * @buffer: Buffer to store the command
+ * @size: Size of the buffer
+ *
+ * Return: Number of characters read, or -1 on EOF
+ */
+ssize_t read_command(char *buffer, size_t size)
+{
+	ssize_t nread;
+
+	nread = getline(&buffer, &size, stdin);
+	
+	if (nread == -1)
+		return (-1);
+	
+	if (nread > 0 && buffer[nread - 1] == '\n')
+		buffer[nread - 1] = '\0';
+	
+	return (nread);
+}
+
+/**
+ * execute_command - Executes a command
+ * @command: The command to execute
+ *
+ * Return: 0 on success, -1 on error
+ */
+int execute_command(char *command)
+{
+	pid_t pid;
+	int status;
+	char *argv[2];
+
+	if (command == NULL || command[0] == '\0')
+		return (0);
+
+	pid = fork();
+	
+	if (pid == -1)
+	{
+		perror("./shell");
+		return (-1);
+	}
+	else if (pid == 0)
+	{
+		argv[0] = command;
+		argv[1] = NULL;
+		
+		if (execve(command, argv, environ) == -1)
+		{
+			fprintf(stderr, "./shell: No such file or directory\n");
+			exit(127);
+		}
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+	}
+	
+	return (0);
+}
+
+/**
+ * main - Entry point for the simple shell
+ *
+ * Return: Always 0
  */
 int main(void)
 {
-    char *input_ptr = NULL;  
 	char *buffer = NULL;
-	size_t bufsize = 0;
-	ssize_t chars_read;
-	pid_t child_pid;
-	char *argv[2];
+	size_t bufsize = MAX_CMD_LEN;
+	ssize_t nread;
+	int interactive;
+
+	buffer = malloc(bufsize);
+	if (buffer == NULL)
+	{
+		perror("malloc");
+		return (1);
+	}
+
+	interactive = isatty(STDIN_FILENO);
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			printf("#cisfun$ ");
-
-		chars_read = getline(&input_ptr, &bufsize, stdin);
-		if (chars_read == -1)
+		if (interactive)
 		{
-			if (isatty(STDIN_FILENO))
+			printf("#cisfun$ ");
+			fflush(stdout);
+		}
+
+		nread = getline(&buffer, &bufsize, stdin);
+		
+		/* Handle EOF (Ctrl+D) */
+		if (nread == -1)
+		{
+			if (interactive)
 				printf("\n");
 			break;
 		}
 
-		input_ptr[chars_read - 1] = '\0';
-        input_ptr = trim_spaces(input_ptr);
+		if (nread > 0 && buffer[nread - 1] == '\n')
+			buffer[nread - 1] = '\0';
 
-        if (buffer[0] == '\0')
-        continue;
-
-		child_pid = fork();
-		if (child_pid == -1)
-		{
-			perror("Error:");
-			break;
-		}
-
-		if (child_pid == 0)
-		{
-			argv[0] = buffer;
-			argv[1] = NULL;
-
-			if (execve(argv[0], argv, environ) == -1)
-			{
-				perror("./shell");
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			wait(NULL);
-		}
+		execute_command(buffer);
 	}
 
-	
-    free(input_ptr);
+	free(buffer);
 	return (0);
-}
-
-
-/**
- * trim_spaces - Removes leading and trailing spaces from a string
- * @str: String to trim
- * Return: Pointer to the trimmed string (same pointer)
- */
-char *trim_spaces(char *str)
-{
-    int start = 0, end;
-
-    if (str == NULL)
-        return (NULL);
-
-    while (str[start] == ' ' || str[start] == '\t')
-        start++;
-
-    end = strlen(str) - 1;
-    while (end >= start && (str[end] == ' ' || str[end] == '\t'))
-        end--;
-
-    str[end + 1] = '\0';
-    return (str + start);
 }
