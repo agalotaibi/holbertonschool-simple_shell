@@ -11,6 +11,11 @@ char *get_location(char *command)
 	if (path)
 	{
 		path_copy = strdup(path);
+		if (path_copy == NULL)
+		{
+			perror("strdup");
+			return (NULL);
+		}
 	/*Get the length of the command*/
 		command_len = strlen(command);
 	/*Break down the path_copy variable into individual tokens*/
@@ -19,11 +24,18 @@ char *get_location(char *command)
 		{
 			directory_length = strlen(path_token);
 			file_path = malloc(command_len + directory_length + 2);
+			if (file_path == NULL)
+			{
+				perror("malloc");
+				free(path_copy);
+				return (NULL);
+			}
 		/* to build the path for the command*/
 			strcpy(file_path, path_token);
 			strcat(file_path, "/");
 			strcat(file_path, command);
 			strcat(file_path, "\0");
+
 			if (stat(file_path, &buffer) == 0)
 			{
 				free(path_copy);
@@ -37,8 +49,7 @@ char *get_location(char *command)
 		}
 		free(path_copy);
 		if (stat(command, &buffer) == 0)
-			return (command);
-		return (NULL);
+			return (strdup(command));
 	}
 	return (NULL);
 }

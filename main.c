@@ -50,60 +50,6 @@ return (argc);
 }
 
 /**
-* execute_command - Executes a command
-* @line: The command line to execute
-*
-* Return: 0 on success, -1 on error
-*/
-int execute_command(char *line)
-{
-pid_t pid;
-int status;
-char *argv[MAX_ARGS], *command_path = NULL;
-int argc;
-
-if (line == NULL || line[0] == '\0')
-return (0);
-
-argc = parse_command(line, argv);
-if (argc == 0)
-return (0);
-
-command_path = get_location(argv[0]);
-
-if (command_path == NULL)
-{
-	fprintf(stderr, "./shell: %s: command not found\n.", argv[0]);
-	return (0);
-}
-
-pid = fork();
-
-if (pid == -1)
-{
-perror("./shell");
-free(command_path);
-return (-1);
-}
-else if (pid == 0)
-{
-if (execve(command_path, argv, environ) == -1)
-{
-fprintf(stderr, "./shell: No such file or directory\n");
-free(command_path);
-exit(127);
-}
-}
-else
-{
-waitpid(pid, &status, 0);
-free(command_path);
-}
-
-return (0);
-}
-
-/**
 * main - Entry point for the simple shell
 *
 * Return: Always 0

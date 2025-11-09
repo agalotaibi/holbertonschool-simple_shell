@@ -9,8 +9,10 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #define MAX_CMD_LEN 1024
-
+#define MAX_ARGS 64
 extern char **environ;
+char **parse_input(char *input);
+int parse_command(char *line, char **argv);
 int execute_command(char *command);
 ssize_t read_command(char *buffer, size_t size);
 char *trim_whitespace(char *str);
