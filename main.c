@@ -48,7 +48,6 @@ argv[argc] = NULL;
 
 return (argc);
 }
-
 /**
 * main - Entry point for the simple shell
 *
@@ -60,6 +59,7 @@ char *buffer = NULL;
 size_t bufsize = 0;
 ssize_t nread;
 int interactive;
+int status;
 
 interactive = isatty(STDIN_FILENO);
 
@@ -85,13 +85,21 @@ buffer[nread - 1] = '\0';
 
 {
 char *trimmed = trim_whitespace(buffer);
+
 if (trimmed[0] != '\0')
 {
 char *cmd_copy = strdup(trimmed);
+
 if (cmd_copy != NULL)
 {
-execute_command(cmd_copy);
+status = execute_command(cmd_copy);
 free(cmd_copy);
+
+if (!interactive && status != 0)
+{
+free(buffer);
+exit(status);
+}
 }
 }
 }
@@ -100,4 +108,3 @@ free(cmd_copy);
 free(buffer);
 return (0);
 }
-

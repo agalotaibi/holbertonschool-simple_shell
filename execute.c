@@ -1,9 +1,10 @@
 #include "shell.h"
+
 /**
 * execute_command - Executes a command
 * @line: The command line to execute
 *
-* Return: 0 on success, -1 on error
+* Return: Exit status of command
 */
 int execute_command(char *line)
 {
@@ -11,7 +12,7 @@ pid_t pid;
 int status;
 char *argv[MAX_ARGS], *command_path = NULL;
 int argc;
-
+static int cmd_count = 1;
 if (line == NULL || line[0] == '\0')
 return (0);
 argc = parse_command(line, argv);
@@ -20,7 +21,8 @@ return (0);
 command_path = get_location(argv[0]);
 if (command_path == NULL)
 {
-fprintf(stderr, "%s: No such file or directory\n", argv[0]);
+fprintf(stderr, "./hsh: %d: %s: not found\n", cmd_count, argv[0]);
+cmd_count++;
 return (127);
 }
 pid = fork();
@@ -43,6 +45,9 @@ else
 {
 waitpid(pid, &status, 0);
 free(command_path);
+cmd_count++;
+if (WIFEXITED(status))
+return (WEXITSTATUS(status));
 }
 return (0);
 }
