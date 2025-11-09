@@ -6,8 +6,14 @@ char *get_location(char *command)
 	int command_len, directory_length;
 	struct stat buffer;
 
+	if (strchr(command, '/') != NULL)
+	{
+		if (stat(command, &buffer) == 0)
+			return (strdup(command));
+		else
+			return (NULL);
+	}
 	path = _getenv("PATH");
-
 	if (path)
 	{
 		path_copy = strdup(path);
@@ -48,8 +54,6 @@ char *get_location(char *command)
 			}
 		}
 		free(path_copy);
-		if (stat(command, &buffer) == 0)
-			return (strdup(command));
 	}
 	return (NULL);
 }
