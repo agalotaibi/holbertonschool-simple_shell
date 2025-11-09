@@ -92,6 +92,12 @@ char *cmd_copy = strdup(trimmed);
 
 if (cmd_copy != NULL)
 {
+if (strcmp(cmd_copy, "exit") == 0)
+{
+free(cmd_copy);
+free(buffer);
+exit(0);
+}
 status = execute_command(cmd_copy);
 free(cmd_copy);
 
