@@ -12,6 +12,8 @@
 #define MAX_ARGS 64
 extern char **environ;
 char **parse_input(char *input);
+int _strncmp(const char *s1, const char *s2, size_t n);
+char *_getenv(const char *name);
 int parse_command(char *line, char **argv);
 int execute_command(char *command);
 ssize_t read_command(char *buffer, size_t size);
