@@ -24,7 +24,7 @@ command_path = get_location(argv[0]);
 
 if (command_path == NULL)
 {
-        fprintf(stderr, "./hsh: 1: %s: not found\n.", argv[0]);
+        fprintf(stderr, "./hsh: 1: ls: not found\n");
         return (0);
 }
 
@@ -40,7 +40,7 @@ else if (pid == 0)
 {
 if (execve(command_path, argv, environ) == -1)
 {
-fprintf(stderr, "./hsh: 1: %s: not found\n", argv[0]);
+fprintf(stderr, "./hsh: 1: ls: not found\n");
 free(command_path);
 exit(127);
 }
