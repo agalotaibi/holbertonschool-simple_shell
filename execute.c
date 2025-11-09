@@ -18,6 +18,8 @@ return (0);
 argc = parse_command(line, argv);
 if (argc == 0)
 return (0);
+if (check_builtin(argv))
+return (0);
 command_path = get_location(argv[0]);
 if (command_path == NULL)
 {
