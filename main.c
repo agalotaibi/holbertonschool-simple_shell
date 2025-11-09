@@ -38,11 +38,11 @@ int parse_command(char *line, char **argv)
 int argc = 0;
 char *token;
 
-token = strtok(line, " \t\n\r");
+token = strtok(line, " \t\n\r\"'");
 while (token != NULL && argc < MAX_ARGS - 1)
 {
 argv[argc++] = token;
-token = strtok(NULL, " \t\n\r");
+token = strtok(NULL, " \t\n\r\"'");
 }
 argv[argc] = NULL;
 
