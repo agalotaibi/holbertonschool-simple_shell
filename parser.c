@@ -1,5 +1,10 @@
 #include "shell.h"
-
+/**
+ * parse_input - Parses an input string into an array of arguments
+ * @input: The input string to parse
+ *
+ * Return: arguments
+ **/
 char **parse_input(char *input)
 {
 char **args;
@@ -22,7 +27,7 @@ token = strtok(NULL, " \t");
 }
 args[i] = NULL;
 
-return args;
+return (args);
 }
 
 /**
@@ -55,7 +60,7 @@ char *_getenv(const char *name)
 {
 	int i = 0;
 	size_t name_len;
-	
+
 	if (name == NULL || environ == NULL)
 		return (NULL);
 	name_len = strlen(name);
