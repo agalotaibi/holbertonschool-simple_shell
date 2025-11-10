@@ -1,2 +1,129 @@
-.TH SIMPLE SHELL 1 "11-13-2025" "1.0" "C - Simple Shell Manual"
+.TH SIMPLE_SHELL 1 "11-11-2025" "1.0" "C - Simple Shell Manual"
+
 .SH NAME
+simple_shell - minimal UNIX command interpreter
+
+.SH SYNOPSIS
+.B ./hsh
+.br
+.B echo "command" | ./hsh
+.br
+.B ./hsh < script.txt
+
+.SH DESCRIPTION
+simple_shell is a small UNIX command interpreter that reads and executes
+commands from standard input or from a file. It provides a lightweight
+execution environment suitable for educational and embedded use while
+maintaining the expected behavior of a basic UNIX shell.
+
+.SH MODES OF OPERATION
+
+.SS Interactive Mode
+When standard input is connected to a terminal (isatty returns true),
+the shell runs interactively. A command prompt:
+
+.RS
+$
+.RE
+
+is displayed before each command.
+
+.SS Non-Interactive Mode
+When standard input is not a terminal, the shell reads commands until EOF
+and executes them sequentially without displaying a prompt. This mode works
+with pipes and script files:
+
+.RS
+$ echo "ls -l" | ./hsh
+.br
+$ ./hsh < script.txt
+.RE
+
+.SH COMMAND EXECUTION
+For each command, the shell performs the following steps:
+
+.RS
+1. Read a line of input.
+.br
+2. Split the line into tokens using whitespace.
+.br
+3. Treat the first token as the command name and the rest as arguments.
+.br
+4. If the command is built-in, execute it internally.
+.br
+5. Otherwise, search for the command in the PATH directories.
+.br
+6. If found, fork a new process and execute it using execve.
+.br
+7. Wait for the child process to finish and record its exit status.
+.RE
+
+If the command cannot be found, the shell prints an error and returns exit status 127.
+If the command is found but cannot be executed, it returns exit status 126.
+
+.SH BUILT-IN COMMANDS
+
+.SS exit
+.B exit [status]
+.RS
+Terminate the shell.
+.br
+If a status is provided, the shell exits with that value.
+.br
+If no status is provided, the exit code of the last executed command is used.
+.RE
+
+.SS env
+.B env
+.RS
+Display the current environment variables in NAME=VALUE format.
+.RE
+
+.SH ENVIRONMENT
+The shell inherits its environment from its parent process. Programs executed
+with execve receive the same environment unless modified by the program.
+
+.SH SIGNALS
+In interactive mode, the shell ignores SIGINT (Ctrl+C) to avoid terminating
+itself, but child processes still receive the signal.
+.br
+Pressing Ctrl+D sends an EOF, which terminates the shell.
+
+.SH LIMITATIONS
+This implementation intentionally omits advanced shell features:
+
+.RS
+- No pipelines
+.br
+- No redirection
+.br
+- No command separators (;, &&, ||)
+.br
+- No grouping
+.br
+- No variable expansion
+.br
+- No wildcard expansion
+.br
+- No scripting support
+.br
+- No comments
+.RE
+
+.SH EXIT STATUS
+The shell exits with the following values:
+
+.RS
+0   - Successful termination
+.br
+126 - Command found but not executable
+.br
+127 - Command not found
+.br
+Otherwise, the exit status is that of the last executed command.
+.RE
+
+.SH AUTHORS
+Amaal AlOtaibi (@agalotaibi)
+.br
+Lamyaa Alghaihab (@Lamyaa439)
