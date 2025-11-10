@@ -92,16 +92,16 @@ char *cmd_copy = strdup(trimmed);
 
 if (cmd_copy != NULL)
 {
+if (strcmp(cmd_copy, "env") == 0)
+{
+print_env();
+free(cmd_copy);
+}
 if (strcmp(cmd_copy, "exit") == 0)
 {
 free(cmd_copy);
 free(buffer);
 exit(0);
-}
-if (strcmp(cmd_copy, "env") == 0)
-{
-	print_env();
-	continue;
 }
 status = execute_command(cmd_copy);
 free(cmd_copy);
