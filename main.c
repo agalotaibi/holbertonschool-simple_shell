@@ -101,6 +101,7 @@ exit(0);
 if (strcmp(cmd_copy, "env") == 0)
 {
 	print_env();
+	continue;
 }
 status = execute_command(cmd_copy);
 free(cmd_copy);
