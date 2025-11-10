@@ -7,8 +7,6 @@ simple_shell - minimal UNIX command interpreter
 .B ./hsh
 .br
 .B echo "command" | ./hsh
-.br
-.B ./hsh < script.txt
 
 .SH DESCRIPTION
 simple_shell is a small UNIX command interpreter that reads and executes
