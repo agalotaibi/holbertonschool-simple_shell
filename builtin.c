@@ -18,3 +18,18 @@ exit(0);
 
 return (0);
 }
+/**
+ * print_env - print env
+ *
+ * Return: void
+ **/
+void print_env(void)
+{
+	int i = 0;
+
+	while (environ[i])
+	{
+		printf("%s\n", environ[i]);
+		i++;
+	}
+}
