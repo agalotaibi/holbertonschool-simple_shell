@@ -31,12 +31,10 @@ is displayed before each command.
 .SS Non-Interactive Mode
 When standard input is not a terminal, the shell reads commands until EOF
 and executes them sequentially without displaying a prompt. This mode works
-with pipes and script files:
+with pipes:
 
 .RS
 $ echo "ls -l" | ./hsh
-.br
-$ ./hsh < script.txt
 .RE
 
 .SH COMMAND EXECUTION
