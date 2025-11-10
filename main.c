@@ -92,7 +92,12 @@ char *cmd_copy = strdup(trimmed);
 
 if (cmd_copy != NULL)
 {
-
+if (strcmp(cmd_copy, "env") == 0)
+{
+print_env();
+free(cmd_copy);
+continue;
+}
 if (strcmp(cmd_copy, "exit") == 0)
 {
 free(cmd_copy);
