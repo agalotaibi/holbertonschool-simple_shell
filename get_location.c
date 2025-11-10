@@ -1,5 +1,4 @@
 #include "shell.h"
-
 char *get_location(char *command)
 {
 	char *path, *path_copy, *path_token, *file_path;
@@ -22,9 +21,7 @@ char *get_location(char *command)
 			perror("strdup");
 			return (NULL);
 		}
-	/*Get the length of the command*/
 		command_len = strlen(command);
-	/*Break down the path_copy variable into individual tokens*/
 		path_token = strtok(path_copy, ":");
 		while (path_token != NULL)
 		{
@@ -36,7 +33,6 @@ char *get_location(char *command)
 				free(path_copy);
 				return (NULL);
 			}
-		/* to build the path for the command*/
 			strcpy(file_path, path_token);
 			strcat(file_path, "/");
 			strcat(file_path, command);

@@ -20,5 +20,5 @@ ssize_t read_command(char *buffer, size_t size);
 char *trim_whitespace(char *str);
 char *get_location(char *command);
 int check_builtin(char **argv);
-
+void print_env(void);
 #endif /* SHELL_H */
