@@ -10,9 +10,8 @@ simple_shell - minimal UNIX command interpreter
 
 .SH DESCRIPTION
 simple_shell is a small UNIX command interpreter that reads and executes
-commands from standard input or from a file. It provides a lightweight
-execution environment suitable for educational and embedded use while
-maintaining the expected behavior of a basic UNIX shell.
+commands from standard input. It provides a lightweight
+execution environment suitable for educational.
 
 .SH MODES OF OPERATION
 
@@ -29,7 +28,7 @@ is displayed before each command.
 .SS Non-Interactive Mode
 When standard input is not a terminal, the shell reads commands until EOF
 and executes them sequentially without displaying a prompt. This mode works
-with pipes:
+with pipe:
 
 .RS
 $ echo "ls -l" | ./hsh
