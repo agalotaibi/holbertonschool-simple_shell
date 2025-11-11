@@ -5,6 +5,7 @@ This project replicates the core behavior of the traditional UNIX shell while pr
 
 ---
 
+
 ## 🧠 Project Overview
 
 The goal of this project is to build a functional command-line interpreter that:
@@ -24,6 +25,7 @@ This project focuses on understanding:
 - System calls and error handling
 
 ---
+
 
 ## 🖥️ Features
 
@@ -48,7 +50,8 @@ This shell intentionally avoids advanced features:
 
 ---
 
-## 📦 Installation
+
+## 📥 Installation
 
 Clone the repository:
 
@@ -98,7 +101,7 @@ PATH=/usr/local/sbin:/usr/local/bin:...
 $ exit
 ```
 
-## 📚 Manual Page
+## 📄 Manual Page
 A full formatted man page is included:
 ```bash
 man ./man_1_simple_shell
